@@ -1,0 +1,2081 @@
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local RunService = game:GetService("RunService")
+
+local player = Players.LocalPlayer
+local backpack = player:WaitForChild("Backpack")
+
+local ESPEnv, tmp = getgenv().LynixESP or {}, nil
+getgenv().LynixESP = ESPEnv
+ESPEnv.Enabled = ESPEnv.Enabled or false
+ESPEnv.Highlights = ESPEnv.Highlights or {}
+ESPEnv.Connections = ESPEnv.Connections or {}
+
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Parent = player:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+ScreenGui.ResetOnSpawn = nil
+
+local FOVCircle = Instance.new("Frame")
+FOVCircle.Name = "FOVCircle"
+FOVCircle.Parent = ScreenGui
+FOVCircle.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+FOVCircle.BackgroundTransparency = 0.7
+FOVCircle.BorderSizePixel = 0
+FOVCircle.Position = UDim2.new(0.5, 0, 0.5, 0)
+FOVCircle.Size = UDim2.new(0, 100, 0, 100)
+FOVCircle.AnchorPoint = Vector2.new(0.5, 0.5)
+FOVCircle.Visible = false
+
+local FOVCircleCorner = Instance.new("UICorner")
+FOVCircleCorner.CornerRadius = UDim.new(1, 0)
+FOVCircleCorner.Parent = FOVCircle
+
+local FOVCircleStroke = Instance.new("UIStroke")
+FOVCircleStroke.Parent = FOVCircle
+FOVCircleStroke.Thickness = 2
+FOVCircleStroke.Color = Color3.fromRGB(255, 217, 78)
+
+local Frame = Instance.new("Frame")
+Frame.Parent = ScreenGui
+Frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame.BorderSizePixel = 0
+Frame.Position = UDim2.new(0.360707402, 0, 0.343568265, 0)
+Frame.Size = UDim2.new(0, 461, 0, 251)
+
+local FrameCorner = Instance.new("UICorner")
+FrameCorner.CornerRadius = UDim.new(0, 9)
+FrameCorner.Parent = Frame
+
+local FrameStroke = Instance.new("UIStroke")
+FrameStroke.Parent = Frame
+FrameStroke.Thickness = 0.5
+FrameStroke.Color = Color3.fromRGB(255, 217, 78)
+FrameStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local UIGradient = Instance.new("UIGradient")
+UIGradient.Color = ColorSequence.new{
+	ColorSequenceKeypoint.new(0.00, Color3.fromRGB(46, 43, 0)),
+	ColorSequenceKeypoint.new(1.00, Color3.fromRGB(6, 6, 6))
+}
+UIGradient.Rotation = 40
+UIGradient.Parent = Frame
+
+local Frame_2 = Instance.new("Frame")
+Frame_2.Parent = Frame
+Frame_2.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+Frame_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_2.BorderSizePixel = 0
+Frame_2.Position = UDim2.new(0, 0, 0.156786546, 0)
+Frame_2.Size = UDim2.new(0, 461, 0, 1)
+
+local Frame_3 = Instance.new("Frame")
+Frame_3.Parent = Frame
+Frame_3.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Frame_3.BackgroundTransparency = 0.9
+Frame_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_3.BorderSizePixel = 0
+Frame_3.Position = UDim2.new(0.0238611717, 0, 0.200995207, 0)
+Frame_3.Size = UDim2.new(0, 107, 0, 189)
+
+local UICorner_2 = Instance.new("UICorner")
+UICorner_2.Parent = Frame_3
+
+local Frame3Stroke = Instance.new("UIStroke")
+Frame3Stroke.Parent = Frame_3
+Frame3Stroke.Thickness = 0.7
+Frame3Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame3Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local Tab1 = Instance.new("TextButton")
+Tab1.Name = "Tab1"
+Tab1.Parent = Frame_3
+Tab1.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Tab1.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Tab1.BorderSizePixel = 0
+Tab1.Position = UDim2.new(0.0934579447, 0, 0.0634922236, 0)
+Tab1.Size = UDim2.new(0, 88, 0, 32)
+Tab1.Font = Enum.Font.FredokaOne
+Tab1.Text = "Main"
+Tab1.TextColor3 = Color3.fromRGB(235, 255, 103)
+Tab1.TextSize = 14.000
+
+local UICorner_3 = Instance.new("UICorner")
+UICorner_3.CornerRadius = UDim.new(0, 3)
+UICorner_3.Parent = Tab1
+
+local Tab1Stroke = Instance.new("UIStroke")
+Tab1Stroke.Parent = Tab1
+Tab1Stroke.Thickness = 0.7
+Tab1Stroke.Color = Color3.fromRGB(255, 217, 78)
+Tab1Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local Tab2 = Instance.new("TextButton")
+Tab2.Name = "Tab2"
+Tab2.Parent = Frame_3
+Tab2.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Tab2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Tab2.BorderSizePixel = 0
+Tab2.Position = UDim2.new(0.0934579447, 0, 0.275132447, 0)
+Tab2.Size = UDim2.new(0, 88, 0, 32)
+Tab2.Font = Enum.Font.FredokaOne
+Tab2.Text = "Teleport"
+Tab2.TextColor3 = Color3.fromRGB(235, 255, 103)
+Tab2.TextSize = 14.000
+
+local UICorner_4 = Instance.new("UICorner")
+UICorner_4.CornerRadius = UDim.new(0, 3)
+UICorner_4.Parent = Tab2
+
+local Tab2Stroke = Instance.new("UIStroke")
+Tab2Stroke.Parent = Tab2
+Tab2Stroke.Thickness = 0.7
+Tab2Stroke.Color = Color3.fromRGB(255, 217, 78)
+Tab2Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local Tab3 = Instance.new("TextButton")
+Tab3.Name = "Tab3"
+Tab3.Parent = Frame_3
+Tab3.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Tab3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Tab3.BorderSizePixel = 0
+Tab3.Position = UDim2.new(0.0934579447, 0, 0.483999997, 0)
+Tab3.Size = UDim2.new(0, 88, 0, 32)
+Tab3.Font = Enum.Font.FredokaOne
+Tab3.Text = "Player"
+Tab3.TextColor3 = Color3.fromRGB(235, 255, 103)
+Tab3.TextSize = 14.000
+
+local UICorner_5 = Instance.new("UICorner")
+UICorner_5.CornerRadius = UDim.new(0, 3)
+UICorner_5.Parent = Tab3
+
+local Tab3Stroke = Instance.new("UIStroke")
+Tab3Stroke.Parent = Tab3
+Tab3Stroke.Thickness = 0.7
+Tab3Stroke.Color = Color3.fromRGB(255, 217, 78)
+Tab3Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local Frame_4 = Instance.new("Frame")
+Frame_4.Parent = Frame
+Frame_4.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Frame_4.BackgroundTransparency = 0.9
+Frame_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_4.BorderSizePixel = 0
+Frame_4.Position = UDim2.new(0.27765727, 0, 0.200995207, 0)
+Frame_4.Size = UDim2.new(0, 323, 0, 189)
+
+local UICorner_6 = Instance.new("UICorner")
+UICorner_6.Parent = Frame_4
+
+local Frame4Stroke = Instance.new("UIStroke")
+Frame4Stroke.Parent = Frame_4
+Frame4Stroke.Thickness = 0.7
+Frame4Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame4Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local ScrollingFrame = Instance.new("ScrollingFrame")
+ScrollingFrame.Name = "MainPage"
+ScrollingFrame.Parent = Frame_4
+ScrollingFrame.Active = true
+ScrollingFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ScrollingFrame.BackgroundTransparency = 1.000
+ScrollingFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ScrollingFrame.BorderSizePixel = 0
+ScrollingFrame.Position = UDim2.new(0, 0, -0.010581526, 0)
+ScrollingFrame.Size = UDim2.new(0, 323, 0, 191)
+ScrollingFrame.ScrollBarThickness = 0
+
+local Frame_5 = Instance.new("Frame")
+Frame_5.Parent = ScrollingFrame
+Frame_5.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Frame_5.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_5.BorderSizePixel = 0
+Frame_5.Position = UDim2.new(0.0340557285, 0, 0.0634920672, 0)
+Frame_5.Size = UDim2.new(0, 300, 0, 38)
+
+local UICorner_7 = Instance.new("UICorner")
+UICorner_7.CornerRadius = UDim.new(0, 3)
+UICorner_7.Parent = Frame_5
+
+local Frame5Stroke = Instance.new("UIStroke")
+Frame5Stroke.Parent = Frame_5
+Frame5Stroke.Thickness = 0.7
+Frame5Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame5Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local TextLabel = Instance.new("TextLabel")
+TextLabel.Parent = Frame_5
+TextLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel.BackgroundTransparency = 1.000
+TextLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel.BorderSizePixel = 0
+TextLabel.Position = UDim2.new(0.05, 0, 0, 0)
+TextLabel.Size = UDim2.new(0, 150, 0, 37)
+TextLabel.Font = Enum.Font.FredokaOne
+TextLabel.Text = "Zero Recoil"
+TextLabel.TextColor3 = Color3.fromRGB(235, 255, 103)
+TextLabel.TextSize = 14.000
+TextLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local TextButton = Instance.new("TextButton")
+TextButton.Parent = Frame_5
+TextButton.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.906666458, 0, 0.342105269, 0)
+TextButton.Size = UDim2.new(0, 11, 0, 11)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = ""
+TextButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.TextSize = 14.000
+TextButton.BackgroundTransparency = 1
+TextButton.ZIndex = 3
+
+local UICorner_8 = Instance.new("UICorner")
+UICorner_8.CornerRadius = UDim.new(1, 0)
+UICorner_8.Parent = TextButton
+
+local Frame_6 = Instance.new("Frame")
+Frame_6.Parent = Frame_5
+Frame_6.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+Frame_6.BackgroundTransparency = 0.93
+Frame_6.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_6.BorderSizePixel = 0
+Frame_6.Position = UDim2.new(0.893333137, 0, 0.234306738, 0)
+Frame_6.Size = UDim2.new(0, 19, 0, 19)
+Frame_6.ZIndex = 2
+
+local UICorner_9 = Instance.new("UICorner")
+UICorner_9.CornerRadius = UDim.new(1, 0)
+UICorner_9.Parent = Frame_6
+
+local Frame6Stroke = Instance.new("UIStroke")
+Frame6Stroke.Parent = Frame_6
+Frame6Stroke.Thickness = 0.7
+Frame6Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame6Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local Frame_7 = Instance.new("Frame")
+Frame_7.Parent = ScrollingFrame
+Frame_7.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Frame_7.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_7.BorderSizePixel = 0
+Frame_7.Position = UDim2.new(0.0340557285, 0, 0.319999993, 0)
+Frame_7.Size = UDim2.new(0, 300, 0, 38)
+
+local UICorner_10 = Instance.new("UICorner")
+UICorner_10.CornerRadius = UDim.new(0, 3)
+UICorner_10.Parent = Frame_7
+
+local Frame7Stroke = Instance.new("UIStroke")
+Frame7Stroke.Parent = Frame_7
+Frame7Stroke.Thickness = 0.7
+Frame7Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame7Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local TextLabel_2 = Instance.new("TextLabel")
+TextLabel_2.Parent = Frame_7
+TextLabel_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_2.BackgroundTransparency = 1.000
+TextLabel_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_2.BorderSizePixel = 0
+TextLabel_2.Position = UDim2.new(0.05, 0, 0, 0)
+TextLabel_2.Size = UDim2.new(0, 150, 0, 37)
+TextLabel_2.Font = Enum.Font.FredokaOne
+TextLabel_2.Text = "Rapid Fire"
+TextLabel_2.TextColor3 = Color3.fromRGB(235, 255, 103)
+TextLabel_2.TextSize = 14.000
+TextLabel_2.TextXAlignment = Enum.TextXAlignment.Left
+
+local TextButton_2 = Instance.new("TextButton")
+TextButton_2.Parent = Frame_7
+TextButton_2.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+TextButton_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_2.BorderSizePixel = 0
+TextButton_2.Position = UDim2.new(0.906666458, 0, 0.340999991, 0)
+TextButton_2.Size = UDim2.new(0, 11, 0, 11)
+TextButton_2.Font = Enum.Font.SourceSans
+TextButton_2.Text = ""
+TextButton_2.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_2.TextSize = 14.000
+TextButton_2.BackgroundTransparency = 1
+TextButton_2.ZIndex = 3
+
+local UICorner_11 = Instance.new("UICorner")
+UICorner_11.CornerRadius = UDim.new(1, 0)
+UICorner_11.Parent = TextButton_2
+
+local Frame_8 = Instance.new("Frame")
+Frame_8.Parent = Frame_7
+Frame_8.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+Frame_8.BackgroundTransparency = 0.93
+Frame_8.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_8.BorderSizePixel = 0
+Frame_8.Position = UDim2.new(0.893333137, 0, 0.234599993, 0)
+Frame_8.Size = UDim2.new(0, 19, 0, 19)
+Frame_8.ZIndex = 2
+
+local UICorner_12 = Instance.new("UICorner")
+UICorner_12.CornerRadius = UDim.new(1, 0)
+UICorner_12.Parent = Frame_8
+
+local Frame8Stroke = Instance.new("UIStroke")
+Frame8Stroke.Parent = Frame_8
+Frame8Stroke.Thickness = 0.7
+Frame8Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame8Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local UIListLayout = Instance.new("UIListLayout")
+UIListLayout.Parent = ScrollingFrame
+UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+UIListLayout.Padding = UDim.new(0, 10)
+
+local UIPadding = Instance.new("UIPadding")
+UIPadding.Parent = ScrollingFrame
+UIPadding.PaddingTop = UDim.new(0, 15)
+
+local Frame_9 = Instance.new("Frame")
+Frame_9.Parent = ScrollingFrame
+Frame_9.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Frame_9.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_9.BorderSizePixel = 0
+Frame_9.Position = UDim2.new(0.0340557285, 0, 0.0634920672, 0)
+Frame_9.Size = UDim2.new(0, 300, 0, 38)
+
+local UICorner_13 = Instance.new("UICorner")
+UICorner_13.CornerRadius = UDim.new(0, 3)
+UICorner_13.Parent = Frame_9
+
+local Frame9Stroke = Instance.new("UIStroke")
+Frame9Stroke.Parent = Frame_9
+Frame9Stroke.Thickness = 0.7
+Frame9Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame9Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local TextLabel_3 = Instance.new("TextLabel")
+TextLabel_3.Parent = Frame_9
+TextLabel_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_3.BackgroundTransparency = 1.000
+TextLabel_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_3.BorderSizePixel = 0
+TextLabel_3.Position = UDim2.new(0.05, 0, 0, 0)
+TextLabel_3.Size = UDim2.new(0, 150, 0, 37)
+TextLabel_3.Font = Enum.Font.FredokaOne
+TextLabel_3.Text = "Fast Reload"
+TextLabel_3.TextColor3 = Color3.fromRGB(235, 255, 103)
+TextLabel_3.TextSize = 14.000
+TextLabel_3.TextXAlignment = Enum.TextXAlignment.Left
+
+local TextButton_3 = Instance.new("TextButton")
+TextButton_3.Parent = Frame_9
+TextButton_3.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+TextButton_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_3.BorderSizePixel = 0
+TextButton_3.Position = UDim2.new(0.906666458, 0, 0.342105269, 0)
+TextButton_3.Size = UDim2.new(0, 11, 0, 11)
+TextButton_3.Font = Enum.Font.SourceSans
+TextButton_3.Text = ""
+TextButton_3.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_3.TextSize = 14.000
+TextButton_3.BackgroundTransparency = 1
+TextButton_3.ZIndex = 3
+
+local UICorner_14 = Instance.new("UICorner")
+UICorner_14.CornerRadius = UDim.new(1, 0)
+UICorner_14.Parent = TextButton_3
+
+local Frame_10 = Instance.new("Frame")
+Frame_10.Parent = Frame_9
+Frame_10.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+Frame_10.BackgroundTransparency = 0.93
+Frame_10.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_10.BorderSizePixel = 0
+Frame_10.Position = UDim2.new(0.893333137, 0, 0.234306738, 0)
+Frame_10.Size = UDim2.new(0, 19, 0, 19)
+Frame_10.ZIndex = 2
+
+local UICorner_15 = Instance.new("UICorner")
+UICorner_15.CornerRadius = UDim.new(1, 0)
+UICorner_15.Parent = Frame_10
+
+local Frame10Stroke = Instance.new("UIStroke")
+Frame10Stroke.Parent = Frame_10
+Frame10Stroke.Thickness = 0.7
+Frame10Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame10Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local Frame_11 = Instance.new("Frame")
+Frame_11.Parent = ScrollingFrame
+Frame_11.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Frame_11.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_11.BorderSizePixel = 0
+Frame_11.Size = UDim2.new(0, 300, 0, 38)
+
+local UICorner_16 = Instance.new("UICorner")
+UICorner_16.CornerRadius = UDim.new(0, 3)
+UICorner_16.Parent = Frame_11
+
+local Frame11Stroke = Instance.new("UIStroke")
+Frame11Stroke.Parent = Frame_11
+Frame11Stroke.Thickness = 0.7
+Frame11Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame11Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local TextLabel_4 = Instance.new("TextLabel")
+TextLabel_4.Parent = Frame_11
+TextLabel_4.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_4.BackgroundTransparency = 1.000
+TextLabel_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_4.BorderSizePixel = 0
+TextLabel_4.Position = UDim2.new(0.05, 0, 0, 0)
+TextLabel_4.Size = UDim2.new(0, 180, 0, 37)
+TextLabel_4.Font = Enum.Font.FredokaOne
+TextLabel_4.Text = "Aimbot"
+TextLabel_4.TextColor3 = Color3.fromRGB(235, 255, 103)
+TextLabel_4.TextSize = 14.000
+TextLabel_4.TextXAlignment = Enum.TextXAlignment.Left
+
+local TextButton_4 = Instance.new("TextButton")
+TextButton_4.Parent = Frame_11
+TextButton_4.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+TextButton_4.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_4.BorderSizePixel = 0
+TextButton_4.Position = UDim2.new(0.906666458, 0, 0.342105269, 0)
+TextButton_4.Size = UDim2.new(0, 11, 0, 11)
+TextButton_4.Font = Enum.Font.SourceSans
+TextButton_4.Text = ""
+TextButton_4.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextButton_4.TextSize = 14.000
+TextButton_4.BackgroundTransparency = 1
+TextButton_4.ZIndex = 3
+
+local UICorner_17 = Instance.new("UICorner")
+UICorner_17.CornerRadius = UDim.new(1, 0)
+UICorner_17.Parent = TextButton_4
+
+local Frame_12 = Instance.new("Frame")
+Frame_12.Parent = Frame_11
+Frame_12.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+Frame_12.BackgroundTransparency = 0.93
+Frame_12.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_12.BorderSizePixel = 0
+Frame_12.Position = UDim2.new(0.893333137, 0, 0.234306738, 0)
+Frame_12.Size = UDim2.new(0, 19, 0, 19)
+Frame_12.ZIndex = 2
+
+local UICorner_18 = Instance.new("UICorner")
+UICorner_18.CornerRadius = UDim.new(1, 0)
+UICorner_18.Parent = Frame_12
+
+local Frame12Stroke = Instance.new("UIStroke")
+Frame12Stroke.Parent = Frame_12
+Frame12Stroke.Thickness = 0.7
+Frame12Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame12Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local Frame_13 = Instance.new("Frame")
+Frame_13.Parent = ScrollingFrame
+Frame_13.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Frame_13.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_13.BorderSizePixel = 0
+Frame_13.Size = UDim2.new(0, 300, 0, 38)
+Frame_13.LayoutOrder = 10
+
+local UICorner_19 = Instance.new("UICorner")
+UICorner_19.CornerRadius = UDim.new(0, 3)
+UICorner_19.Parent = Frame_13
+
+local Frame13Stroke = Instance.new("UIStroke")
+Frame13Stroke.Parent = Frame_13
+Frame13Stroke.Thickness = 0.7
+Frame13Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame13Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local TextLabel_6 = Instance.new("TextLabel")
+TextLabel_6.Parent = Frame_13
+TextLabel_6.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_6.BackgroundTransparency = 1.000
+TextLabel_6.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_6.BorderSizePixel = 0
+TextLabel_6.Position = UDim2.new(0.05, 0, 0, 0)
+TextLabel_6.Size = UDim2.new(0, 180, 0, 37)
+TextLabel_6.Font = Enum.Font.FredokaOne
+TextLabel_6.Text = "Silent Aim"
+TextLabel_6.TextColor3 = Color3.fromRGB(235, 255, 103)
+TextLabel_6.TextSize = 14.000
+TextLabel_6.TextXAlignment = Enum.TextXAlignment.Left
+
+local AimbotToggleButton = Instance.new("TextButton")
+AimbotToggleButton.Name = "AimbotToggleButton"
+AimbotToggleButton.Parent = Frame_13
+AimbotToggleButton.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+AimbotToggleButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+AimbotToggleButton.BorderSizePixel = 0
+AimbotToggleButton.Position = UDim2.new(0.906666458, 0, 0.342105269, 0)
+AimbotToggleButton.Size = UDim2.new(0, 11, 0, 11)
+AimbotToggleButton.Font = Enum.Font.SourceSans
+AimbotToggleButton.Text = ""
+AimbotToggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+AimbotToggleButton.TextSize = 14.000
+AimbotToggleButton.BackgroundTransparency = 1
+AimbotToggleButton.ZIndex = 3
+
+local UICorner_20 = Instance.new("UICorner")
+UICorner_20.CornerRadius = UDim.new(1, 0)
+UICorner_20.Parent = AimbotToggleButton
+
+local Frame_14 = Instance.new("Frame")
+Frame_14.Parent = Frame_13
+Frame_14.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+Frame_14.BackgroundTransparency = 0.93
+Frame_14.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_14.BorderSizePixel = 0
+Frame_14.Position = UDim2.new(0.893333137, 0, 0.234306738, 0)
+Frame_14.Size = UDim2.new(0, 19, 0, 19)
+Frame_14.ZIndex = 2
+
+local UICorner_21 = Instance.new("UICorner")
+UICorner_21.CornerRadius = UDim.new(1, 0)
+UICorner_21.Parent = Frame_14
+
+local Frame14Stroke = Instance.new("UIStroke")
+Frame14Stroke.Parent = Frame_14
+Frame14Stroke.Thickness = 0.7
+Frame14Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame14Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local Frame_15 = Instance.new("Frame")
+Frame_15.Parent = ScrollingFrame
+Frame_15.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+Frame_15.BorderColor3 = Color3.fromRGB(0, 0, 0)
+Frame_15.BorderSizePixel = 0
+Frame_15.Size = UDim2.new(0, 300, 0, 60)
+Frame_15.LayoutOrder = 11
+
+local UICorner_22 = Instance.new("UICorner")
+UICorner_22.CornerRadius = UDim.new(0, 3)
+UICorner_22.Parent = Frame_15
+
+local Frame15Stroke = Instance.new("UIStroke")
+Frame15Stroke.Parent = Frame_15
+Frame15Stroke.Thickness = 0.7
+Frame15Stroke.Color = Color3.fromRGB(255, 217, 78)
+Frame15Stroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local TextLabel_7 = Instance.new("TextLabel")
+TextLabel_7.Parent = Frame_15
+TextLabel_7.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_7.BackgroundTransparency = 1.000
+TextLabel_7.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_7.BorderSizePixel = 0
+TextLabel_7.Position = UDim2.new(0.05, 0, 0.05, 0)
+TextLabel_7.Size = UDim2.new(0, 180, 0, 20)
+TextLabel_7.Font = Enum.Font.FredokaOne
+TextLabel_7.Text = "FOV Size: 100"
+TextLabel_7.TextColor3 = Color3.fromRGB(235, 255, 103)
+TextLabel_7.TextSize = 12.000
+TextLabel_7.TextXAlignment = Enum.TextXAlignment.Left
+
+local FOVSlider = Instance.new("Frame")
+FOVSlider.Name = "FOVSlider"
+FOVSlider.Parent = Frame_15
+FOVSlider.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+FOVSlider.BorderColor3 = Color3.fromRGB(0, 0, 0)
+FOVSlider.BorderSizePixel = 0
+FOVSlider.Position = UDim2.new(0.05, 0, 0.55, 0)
+FOVSlider.Size = UDim2.new(0.9, 0, 0, 10)
+
+local UICorner_23 = Instance.new("UICorner")
+UICorner_23.CornerRadius = UDim.new(0, 5)
+UICorner_23.Parent = FOVSlider
+
+local SliderFill = Instance.new("Frame")
+SliderFill.Name = "SliderFill"
+SliderFill.Parent = FOVSlider
+SliderFill.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+SliderFill.BorderColor3 = Color3.fromRGB(0, 0, 0)
+SliderFill.BorderSizePixel = 0
+SliderFill.Size = UDim2.new(0.5, 0, 1, 0)
+
+local UICorner_24 = Instance.new("UICorner")
+UICorner_24.CornerRadius = UDim.new(0, 5)
+UICorner_24.Parent = SliderFill
+
+local SliderButton = Instance.new("TextButton")
+SliderButton.Name = "SliderButton"
+SliderButton.Parent = FOVSlider
+SliderButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+SliderButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+SliderButton.BorderSizePixel = 0
+SliderButton.Position = UDim2.new(0.5, -7, 0, -2)
+SliderButton.Size = UDim2.new(0, 14, 0, 14)
+SliderButton.Font = Enum.Font.SourceSans
+SliderButton.Text = ""
+SliderButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+SliderButton.TextSize = 14.000
+
+local UICorner_25 = Instance.new("UICorner")
+UICorner_25.CornerRadius = UDim.new(1, 0)
+UICorner_25.Parent = SliderButton
+
+local SliderButtonStroke = Instance.new("UIStroke")
+SliderButtonStroke.Parent = SliderButton
+SliderButtonStroke.Thickness = 1
+SliderButtonStroke.Color = Color3.fromRGB(255, 217, 78)
+
+local TextLabel_5 = Instance.new("TextLabel")
+TextLabel_5.Parent = Frame
+TextLabel_5.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextLabel_5.BackgroundTransparency = 1.000
+TextLabel_5.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextLabel_5.BorderSizePixel = 0
+TextLabel_5.Position = UDim2.new(0.0455531441, 0, 0, 0)
+TextLabel_5.Size = UDim2.new(0, 100, 0, 40)
+TextLabel_5.Font = Enum.Font.FredokaOne
+TextLabel_5.Text = "Lynix"
+TextLabel_5.TextColor3 = Color3.fromRGB(235, 255, 103)
+TextLabel_5.TextSize = 18.000
+TextLabel_5.TextXAlignment = Enum.TextXAlignment.Left
+
+local ImageButton_2 = Instance.new("ImageButton")
+ImageButton_2.Parent = Frame
+ImageButton_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ImageButton_2.BackgroundTransparency = 1.000
+ImageButton_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ImageButton_2.BorderSizePixel = 0
+ImageButton_2.Position = UDim2.new(0.915401161, 0, 0.0318725109, 0)
+ImageButton_2.Size = UDim2.new(0, 30, 0, 24)
+ImageButton_2.Image = "rbxassetid://103094495394151"
+
+local ImageButton_3 = Instance.new("ImageButton")
+ImageButton_3.Parent = Frame
+ImageButton_3.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+ImageButton_3.BackgroundTransparency = 1.000
+ImageButton_3.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ImageButton_3.BorderSizePixel = 0
+ImageButton_3.Position = UDim2.new(0.850325227, 0, 0.0318725109, 0)
+ImageButton_3.Size = UDim2.new(0, 30, 0, 24)
+ImageButton_3.Image = "rbxassetid://80500837074519"
+
+local TeleportPage = Instance.new("Frame")
+TeleportPage.Name = "TeleportPage"
+TeleportPage.Parent = Frame_4
+TeleportPage.BackgroundTransparency = 1
+TeleportPage.Size = UDim2.new(1, 0, 1, 0)
+TeleportPage.Visible = false
+
+local TeleportScroll = Instance.new("ScrollingFrame")
+TeleportScroll.Name = "TeleportScroll"
+TeleportScroll.Parent = TeleportPage
+TeleportScroll.Active = true
+TeleportScroll.BackgroundTransparency = 1
+TeleportScroll.BorderSizePixel = 0
+TeleportScroll.Position = UDim2.new(0, 0, 0, 0)
+TeleportScroll.Size = UDim2.new(1, 0, 1, 0)
+TeleportScroll.ScrollBarThickness = 4
+
+local TeleportLayout = Instance.new("UIListLayout")
+TeleportLayout.Parent = TeleportScroll
+TeleportLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+TeleportLayout.SortOrder = Enum.SortOrder.LayoutOrder
+TeleportLayout.Padding = UDim.new(0, 10)
+
+local TeleportPadding = Instance.new("UIPadding")
+TeleportPadding.Parent = TeleportScroll
+TeleportPadding.PaddingTop = UDim.new(0, 15)
+TeleportPadding.PaddingLeft = UDim.new(0, 10)
+TeleportPadding.PaddingRight = UDim.new(0, 10)
+
+local PlayerPage = Instance.new("ScrollingFrame")
+PlayerPage.Name = "PlayerPage"
+PlayerPage.Parent = Frame_4
+PlayerPage.BackgroundTransparency = 1
+PlayerPage.Size = UDim2.new(1, 0, 1, 0)
+PlayerPage.Visible = false
+PlayerPage.ScrollBarThickness = 4
+
+local PlayerLayout = Instance.new("UIListLayout")
+PlayerLayout.Parent = PlayerPage
+PlayerLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+PlayerLayout.SortOrder = Enum.SortOrder.LayoutOrder
+PlayerLayout.Padding = UDim.new(0, 10)
+
+local PlayerPadding = Instance.new("UIPadding")
+PlayerPadding.Parent = PlayerPage
+PlayerPadding.PaddingTop = UDim.new(0, 15)
+PlayerPadding.PaddingLeft = UDim.new(0, 10)
+PlayerPadding.PaddingRight = UDim.new(0, 10)
+
+local WalkSpeedFrame = Instance.new("Frame")
+WalkSpeedFrame.Parent = PlayerPage
+WalkSpeedFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+WalkSpeedFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WalkSpeedFrame.BorderSizePixel = 0
+WalkSpeedFrame.Size = UDim2.new(1, -20, 0, 60)
+WalkSpeedFrame.LayoutOrder = 1
+
+local WalkSpeedCorner = Instance.new("UICorner")
+WalkSpeedCorner.CornerRadius = UDim.new(0, 3)
+WalkSpeedCorner.Parent = WalkSpeedFrame
+
+local WalkSpeedStroke = Instance.new("UIStroke")
+WalkSpeedStroke.Parent = WalkSpeedFrame
+WalkSpeedStroke.Thickness = 0.7
+WalkSpeedStroke.Color = Color3.fromRGB(255, 217, 78)
+WalkSpeedStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local WalkSpeedLabel = Instance.new("TextLabel")
+WalkSpeedLabel.Parent = WalkSpeedFrame
+WalkSpeedLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+WalkSpeedLabel.BackgroundTransparency = 1.000
+WalkSpeedLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WalkSpeedLabel.BorderSizePixel = 0
+WalkSpeedLabel.Position = UDim2.new(0.05, 0, 0.05, 0)
+WalkSpeedLabel.Size = UDim2.new(0.9, 0, 0, 20)
+WalkSpeedLabel.Font = Enum.Font.FredokaOne
+WalkSpeedLabel.Text = "WalkSpeed: 16"
+WalkSpeedLabel.TextColor3 = Color3.fromRGB(235, 255, 103)
+WalkSpeedLabel.TextSize = 12.000
+WalkSpeedLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local WalkSpeedSlider = Instance.new("Frame")
+WalkSpeedSlider.Name = "WalkSpeedSlider"
+WalkSpeedSlider.Parent = WalkSpeedFrame
+WalkSpeedSlider.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+WalkSpeedSlider.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WalkSpeedSlider.BorderSizePixel = 0
+WalkSpeedSlider.Position = UDim2.new(0.05, 0, 0.55, 0)
+WalkSpeedSlider.Size = UDim2.new(0.9, 0, 0, 10)
+
+local WalkSpeedSliderCorner = Instance.new("UICorner")
+WalkSpeedSliderCorner.CornerRadius = UDim.new(0, 5)
+WalkSpeedSliderCorner.Parent = WalkSpeedSlider
+
+local WalkSpeedFill = Instance.new("Frame")
+WalkSpeedFill.Name = "WalkSpeedFill"
+WalkSpeedFill.Parent = WalkSpeedSlider
+WalkSpeedFill.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+WalkSpeedFill.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WalkSpeedFill.BorderSizePixel = 0
+WalkSpeedFill.Size = UDim2.new(0.2, 0, 1, 0)
+
+local WalkSpeedFillCorner = Instance.new("UICorner")
+WalkSpeedFillCorner.CornerRadius = UDim.new(0, 5)
+WalkSpeedFillCorner.Parent = WalkSpeedFill
+
+local WalkSpeedButton = Instance.new("TextButton")
+WalkSpeedButton.Name = "WalkSpeedButton"
+WalkSpeedButton.Parent = WalkSpeedSlider
+WalkSpeedButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+WalkSpeedButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+WalkSpeedButton.BorderSizePixel = 0
+WalkSpeedButton.Position = UDim2.new(0.2, -7, 0, -2)
+WalkSpeedButton.Size = UDim2.new(0, 14, 0, 14)
+WalkSpeedButton.Font = Enum.Font.SourceSans
+WalkSpeedButton.Text = ""
+WalkSpeedButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+WalkSpeedButton.TextSize = 14.000
+
+local WalkSpeedButtonCorner = Instance.new("UICorner")
+WalkSpeedButtonCorner.CornerRadius = UDim.new(1, 0)
+WalkSpeedButtonCorner.Parent = WalkSpeedButton
+
+local WalkSpeedButtonStroke = Instance.new("UIStroke")
+WalkSpeedButtonStroke.Parent = WalkSpeedButton
+WalkSpeedButtonStroke.Thickness = 1
+WalkSpeedButtonStroke.Color = Color3.fromRGB(255, 217, 78)
+
+local JumpPowerFrame = Instance.new("Frame")
+JumpPowerFrame.Parent = PlayerPage
+JumpPowerFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+JumpPowerFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+JumpPowerFrame.BorderSizePixel = 0
+JumpPowerFrame.Size = UDim2.new(1, -20, 0, 60)
+JumpPowerFrame.LayoutOrder = 2
+
+local JumpPowerCorner = Instance.new("UICorner")
+JumpPowerCorner.CornerRadius = UDim.new(0, 3)
+JumpPowerCorner.Parent = JumpPowerFrame
+
+local JumpPowerStroke = Instance.new("UIStroke")
+JumpPowerStroke.Parent = JumpPowerFrame
+JumpPowerStroke.Thickness = 0.7
+JumpPowerStroke.Color = Color3.fromRGB(255, 217, 78)
+JumpPowerStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local JumpPowerLabel = Instance.new("TextLabel")
+JumpPowerLabel.Parent = JumpPowerFrame
+JumpPowerLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+JumpPowerLabel.BackgroundTransparency = 1.000
+JumpPowerLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+JumpPowerLabel.BorderSizePixel = 0
+JumpPowerLabel.Position = UDim2.new(0.05, 0, 0.05, 0)
+JumpPowerLabel.Size = UDim2.new(0.9, 0, 0, 20)
+JumpPowerLabel.Font = Enum.Font.FredokaOne
+JumpPowerLabel.Text = "JumpPower: 50"
+JumpPowerLabel.TextColor3 = Color3.fromRGB(235, 255, 103)
+JumpPowerLabel.TextSize = 12.000
+JumpPowerLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local JumpPowerSlider = Instance.new("Frame")
+JumpPowerSlider.Name = "JumpPowerSlider"
+JumpPowerSlider.Parent = JumpPowerFrame
+JumpPowerSlider.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+JumpPowerSlider.BorderColor3 = Color3.fromRGB(0, 0, 0)
+JumpPowerSlider.BorderSizePixel = 0
+JumpPowerSlider.Position = UDim2.new(0.05, 0, 0.55, 0)
+JumpPowerSlider.Size = UDim2.new(0.9, 0, 0, 10)
+
+local JumpPowerSliderCorner = Instance.new("UICorner")
+JumpPowerSliderCorner.CornerRadius = UDim.new(0, 5)
+JumpPowerSliderCorner.Parent = JumpPowerSlider
+
+local JumpPowerFill = Instance.new("Frame")
+JumpPowerFill.Name = "JumpPowerFill"
+JumpPowerFill.Parent = JumpPowerSlider
+JumpPowerFill.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+JumpPowerFill.BorderColor3 = Color3.fromRGB(0, 0, 0)
+JumpPowerFill.BorderSizePixel = 0
+JumpPowerFill.Size = UDim2.new(0.5, 0, 1, 0)
+
+local JumpPowerFillCorner = Instance.new("UICorner")
+JumpPowerFillCorner.CornerRadius = UDim.new(0, 5)
+JumpPowerFillCorner.Parent = JumpPowerFill
+
+local JumpPowerButton = Instance.new("TextButton")
+JumpPowerButton.Name = "JumpPowerButton"
+JumpPowerButton.Parent = JumpPowerSlider
+JumpPowerButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+JumpPowerButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+JumpPowerButton.BorderSizePixel = 0
+JumpPowerButton.Position = UDim2.new(0.5, -7, 0, -2)
+JumpPowerButton.Size = UDim2.new(0, 14, 0, 14)
+JumpPowerButton.Font = Enum.Font.SourceSans
+JumpPowerButton.Text = ""
+JumpPowerButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+JumpPowerButton.TextSize = 14.000
+
+local JumpPowerButtonCorner = Instance.new("UICorner")
+JumpPowerButtonCorner.CornerRadius = UDim.new(1, 0)
+JumpPowerButtonCorner.Parent = JumpPowerButton
+
+local JumpPowerButtonStroke = Instance.new("UIStroke")
+JumpPowerButtonStroke.Parent = JumpPowerButton
+JumpPowerButtonStroke.Thickness = 1
+JumpPowerButtonStroke.Color = Color3.fromRGB(255, 217, 78)
+
+local InfiniteJumpFrame = Instance.new("Frame")
+InfiniteJumpFrame.Parent = PlayerPage
+InfiniteJumpFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+InfiniteJumpFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+InfiniteJumpFrame.BorderSizePixel = 0
+InfiniteJumpFrame.Size = UDim2.new(1, -20, 0, 38)
+InfiniteJumpFrame.LayoutOrder = 3
+
+local InfiniteJumpCorner = Instance.new("UICorner")
+InfiniteJumpCorner.CornerRadius = UDim.new(0, 3)
+InfiniteJumpCorner.Parent = InfiniteJumpFrame
+
+local InfiniteJumpStroke = Instance.new("UIStroke")
+InfiniteJumpStroke.Parent = InfiniteJumpFrame
+InfiniteJumpStroke.Thickness = 0.7
+InfiniteJumpStroke.Color = Color3.fromRGB(255, 217, 78)
+InfiniteJumpStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local InfiniteJumpLabel = Instance.new("TextLabel")
+InfiniteJumpLabel.Parent = InfiniteJumpFrame
+InfiniteJumpLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+InfiniteJumpLabel.BackgroundTransparency = 1.000
+InfiniteJumpLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+InfiniteJumpLabel.BorderSizePixel = 0
+InfiniteJumpLabel.Position = UDim2.new(0.05, 0, 0, 0)
+InfiniteJumpLabel.Size = UDim2.new(0, 200, 0, 37)
+InfiniteJumpLabel.Font = Enum.Font.FredokaOne
+InfiniteJumpLabel.Text = "Infinite Jump"
+InfiniteJumpLabel.TextColor3 = Color3.fromRGB(235, 255, 103)
+InfiniteJumpLabel.TextSize = 14.000
+InfiniteJumpLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local InfiniteJumpToggleButton = Instance.new("TextButton")
+InfiniteJumpToggleButton.Name = "InfiniteJumpToggleButton"
+InfiniteJumpToggleButton.Parent = InfiniteJumpFrame
+InfiniteJumpToggleButton.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+InfiniteJumpToggleButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+InfiniteJumpToggleButton.BorderSizePixel = 0
+InfiniteJumpToggleButton.Position = UDim2.new(0.9, -15, 0.5, -5.5)
+InfiniteJumpToggleButton.Size = UDim2.new(0, 11, 0, 11)
+InfiniteJumpToggleButton.Font = Enum.Font.SourceSans
+InfiniteJumpToggleButton.Text = ""
+InfiniteJumpToggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+InfiniteJumpToggleButton.TextSize = 14.000
+InfiniteJumpToggleButton.BackgroundTransparency = 1
+InfiniteJumpToggleButton.ZIndex = 3
+
+local InfiniteJumpToggleCorner = Instance.new("UICorner")
+InfiniteJumpToggleCorner.CornerRadius = UDim.new(1, 0)
+InfiniteJumpToggleCorner.Parent = InfiniteJumpToggleButton
+
+local InfiniteJumpToggleBack = Instance.new("Frame")
+InfiniteJumpToggleBack.Parent = InfiniteJumpFrame
+InfiniteJumpToggleBack.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+InfiniteJumpToggleBack.BackgroundTransparency = 0.93
+InfiniteJumpToggleBack.BorderColor3 = Color3.fromRGB(0, 0, 0)
+InfiniteJumpToggleBack.BorderSizePixel = 0
+InfiniteJumpToggleBack.Position = UDim2.new(0.9, -19, 0.5, -9.5)
+InfiniteJumpToggleBack.Size = UDim2.new(0, 19, 0, 19)
+InfiniteJumpToggleBack.ZIndex = 2
+
+local InfiniteJumpToggleBackCorner = Instance.new("UICorner")
+InfiniteJumpToggleBackCorner.CornerRadius = UDim.new(1, 0)
+InfiniteJumpToggleBackCorner.Parent = InfiniteJumpToggleBack
+
+local InfiniteJumpToggleStroke = Instance.new("UIStroke")
+InfiniteJumpToggleStroke.Parent = InfiniteJumpToggleBack
+InfiniteJumpToggleStroke.Thickness = 0.7
+InfiniteJumpToggleStroke.Color = Color3.fromRGB(255, 217, 78)
+InfiniteJumpToggleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local NoclipFrame = Instance.new("Frame")
+NoclipFrame.Parent = PlayerPage
+NoclipFrame.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+NoclipFrame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+NoclipFrame.BorderSizePixel = 0
+NoclipFrame.Size = UDim2.new(1, -20, 0, 38)
+NoclipFrame.LayoutOrder = 4
+
+local NoclipCorner = Instance.new("UICorner")
+NoclipCorner.CornerRadius = UDim.new(0, 3)
+NoclipCorner.Parent = NoclipFrame
+
+local NoclipStroke = Instance.new("UIStroke")
+NoclipStroke.Parent = NoclipFrame
+NoclipStroke.Thickness = 0.7
+NoclipStroke.Color = Color3.fromRGB(255, 217, 78)
+NoclipStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local NoclipLabel = Instance.new("TextLabel")
+NoclipLabel.Parent = NoclipFrame
+NoclipLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+NoclipLabel.BackgroundTransparency = 1.000
+NoclipLabel.BorderColor3 = Color3.fromRGB(0, 0, 0)
+NoclipLabel.BorderSizePixel = 0
+NoclipLabel.Position = UDim2.new(0.05, 0, 0, 0)
+NoclipLabel.Size = UDim2.new(0, 200, 0, 37)
+NoclipLabel.Font = Enum.Font.FredokaOne
+NoclipLabel.Text = "Noclip"
+NoclipLabel.TextColor3 = Color3.fromRGB(235, 255, 103)
+NoclipLabel.TextSize = 14.000
+NoclipLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+local NoclipToggleButton = Instance.new("TextButton")
+NoclipToggleButton.Name = "NoclipToggleButton"
+NoclipToggleButton.Parent = NoclipFrame
+NoclipToggleButton.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+NoclipToggleButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+NoclipToggleButton.BorderSizePixel = 0
+NoclipToggleButton.Position = UDim2.new(0.9, -15, 0.5, -5.5)
+NoclipToggleButton.Size = UDim2.new(0, 11, 0, 11)
+NoclipToggleButton.Font = Enum.Font.SourceSans
+NoclipToggleButton.Text = ""
+NoclipToggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+NoclipToggleButton.TextSize = 14.000
+NoclipToggleButton.BackgroundTransparency = 1
+NoclipToggleButton.ZIndex = 3
+
+local NoclipToggleCorner = Instance.new("UICorner")
+NoclipToggleCorner.CornerRadius = UDim.new(1, 0)
+NoclipToggleCorner.Parent = NoclipToggleButton
+
+local NoclipToggleBack = Instance.new("Frame")
+NoclipToggleBack.Parent = NoclipFrame
+NoclipToggleBack.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+NoclipToggleBack.BackgroundTransparency = 0.93
+NoclipToggleBack.BorderColor3 = Color3.fromRGB(0, 0, 0)
+NoclipToggleBack.BorderSizePixel = 0
+NoclipToggleBack.Position = UDim2.new(0.9, -19, 0.5, -9.5)
+NoclipToggleBack.Size = UDim2.new(0, 19, 0, 19)
+NoclipToggleBack.ZIndex = 2
+
+local NoclipToggleBackCorner = Instance.new("UICorner")
+NoclipToggleBackCorner.CornerRadius = UDim.new(1, 0)
+NoclipToggleBackCorner.Parent = NoclipToggleBack
+
+local NoclipToggleStroke = Instance.new("UIStroke")
+NoclipToggleStroke.Parent = NoclipToggleBack
+NoclipToggleStroke.Thickness = 0.7
+NoclipToggleStroke.Color = Color3.fromRGB(255, 217, 78)
+NoclipToggleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+ESPEnv.Frame = Instance.new("Frame")
+ESPEnv.Frame.Parent = PlayerPage
+ESPEnv.Frame.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+ESPEnv.Frame.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ESPEnv.Frame.BorderSizePixel = 0
+ESPEnv.Frame.Size = UDim2.new(1, -20, 0, 38)
+ESPEnv.Frame.LayoutOrder = 5
+
+tmp = Instance.new("UICorner")
+tmp.CornerRadius = UDim.new(0, 3)
+tmp.Parent = ESPEnv.Frame
+
+ESPEnv.FrameStroke = Instance.new("UIStroke")
+ESPEnv.FrameStroke.Parent = ESPEnv.Frame
+ESPEnv.FrameStroke.Thickness = 0.7
+ESPEnv.FrameStroke.Color = Color3.fromRGB(255, 217, 78)
+ESPEnv.FrameStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+tmp = Instance.new("TextLabel")
+tmp.Parent = ESPEnv.Frame
+tmp.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+tmp.BackgroundTransparency = 1.000
+tmp.BorderColor3 = Color3.fromRGB(0, 0, 0)
+tmp.BorderSizePixel = 0
+tmp.Position = UDim2.new(0.05, 0, 0, 0)
+tmp.Size = UDim2.new(0, 200, 0, 37)
+tmp.Font = Enum.Font.FredokaOne
+tmp.Text = "ESP"
+tmp.TextColor3 = Color3.fromRGB(235, 255, 103)
+tmp.TextSize = 14.000
+tmp.TextXAlignment = Enum.TextXAlignment.Left
+
+ESPEnv.ToggleButton = Instance.new("TextButton")
+ESPEnv.ToggleButton.Name = "ESPToggleButton"
+ESPEnv.ToggleButton.Parent = ESPEnv.Frame
+ESPEnv.ToggleButton.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+ESPEnv.ToggleButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ESPEnv.ToggleButton.BorderSizePixel = 0
+ESPEnv.ToggleButton.Position = UDim2.new(0.9, -15, 0.5, -5.5)
+ESPEnv.ToggleButton.Size = UDim2.new(0, 11, 0, 11)
+ESPEnv.ToggleButton.Font = Enum.Font.SourceSans
+ESPEnv.ToggleButton.Text = ""
+ESPEnv.ToggleButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+ESPEnv.ToggleButton.TextSize = 14.000
+ESPEnv.ToggleButton.BackgroundTransparency = 1
+ESPEnv.ToggleButton.ZIndex = 3
+
+tmp = Instance.new("UICorner")
+tmp.CornerRadius = UDim.new(1, 0)
+tmp.Parent = ESPEnv.ToggleButton
+
+ESPEnv.ToggleBack = Instance.new("Frame")
+ESPEnv.ToggleBack.Parent = ESPEnv.Frame
+ESPEnv.ToggleBack.BackgroundColor3 = Color3.fromRGB(9, 9, 9)
+ESPEnv.ToggleBack.BackgroundTransparency = 0.93
+ESPEnv.ToggleBack.BorderColor3 = Color3.fromRGB(0, 0, 0)
+ESPEnv.ToggleBack.BorderSizePixel = 0
+ESPEnv.ToggleBack.Position = UDim2.new(0.9, -19, 0.5, -9.5)
+ESPEnv.ToggleBack.Size = UDim2.new(0, 19, 0, 19)
+ESPEnv.ToggleBack.ZIndex = 2
+
+tmp = Instance.new("UICorner")
+tmp.CornerRadius = UDim.new(1, 0)
+tmp.Parent = ESPEnv.ToggleBack
+
+ESPEnv.ToggleStroke = Instance.new("UIStroke")
+ESPEnv.ToggleStroke.Parent = ESPEnv.ToggleBack
+ESPEnv.ToggleStroke.Thickness = 0.7
+ESPEnv.ToggleStroke.Color = Color3.fromRGB(255, 217, 78)
+ESPEnv.ToggleStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+local function addHoverEffect(guiObject, stroke, baseThickness)
+	baseThickness = baseThickness or 0.7
+	local scale = Instance.new("UIScale")
+	scale.Parent = guiObject
+	scale.Scale = 1
+
+	local info = TweenInfo.new(0.15, Enum.EasingStyle.Quint, Enum.EasingDirection.Out)
+	local hoverScale = TweenService:Create(scale, info, {Scale = 1.03})
+	local leaveScale = TweenService:Create(scale, info, {Scale = 1})
+
+	local hoverStroke, leaveStroke
+	if stroke then
+		hoverStroke = TweenService:Create(stroke, info, {Thickness = baseThickness + 0.5})
+		leaveStroke = TweenService:Create(stroke, info, {Thickness = baseThickness})
+	end
+
+	guiObject.MouseEnter:Connect(function()
+		hoverScale:Play()
+		if hoverStroke then hoverStroke:Play() end
+	end)
+
+	guiObject.MouseLeave:Connect(function()
+		leaveScale:Play()
+		if leaveStroke then leaveStroke:Play() end
+	end)
+end
+
+addHoverEffect(Tab1, Tab1Stroke, 0.7)
+addHoverEffect(Tab2, Tab2Stroke, 0.7)
+addHoverEffect(Tab3, Tab3Stroke, 0.7)
+
+addHoverEffect(Frame_5, Frame5Stroke, 0.7)
+addHoverEffect(Frame_7, Frame7Stroke, 0.7)
+addHoverEffect(Frame_9, Frame9Stroke, 0.7)
+addHoverEffect(Frame_11, Frame11Stroke, 0.7)
+addHoverEffect(Frame_13, Frame13Stroke, 0.7)
+addHoverEffect(Frame_15, Frame15Stroke, 0.7)
+addHoverEffect(WalkSpeedFrame, WalkSpeedStroke, 0.7)
+addHoverEffect(JumpPowerFrame, JumpPowerStroke, 0.7)
+addHoverEffect(InfiniteJumpFrame, InfiniteJumpStroke, 0.7)
+addHoverEffect(NoclipFrame, NoclipStroke, 0.7)
+addHoverEffect(ESPEnv.Frame, ESPEnv.FrameStroke, 0.7)
+
+local TeleportCoordinates = {
+	Armory = Vector3.new(828.2183837890625, 99.97666931152344, 2246.656005859375),
+	Kitchen = Vector3.new(772.7656860351562, 99.98999786376953, 2263.6357421875),
+	["Café"] = Vector3.new(914.18994140625, 99.98995208740234, 2322.803955078125),
+	Nexus = Vector3.new(880.0348510742188, 99.99999237060547, 2388.252197265625),
+	Cellblock = Vector3.new(915.101806640625, 99.98998260498047, 2438.829833984375),
+	["Criminal base"] = Vector3.new(-921.727294921875, 94.12886810302734, 2062.712158203125),
+}
+
+local function teleportToCoord(name)
+	local pos = TeleportCoordinates[name]
+	if not pos then return end
+
+	local character = player.Character or player.CharacterAdded:Wait()
+	local hrp = character:FindFirstChild("HumanoidRootPart")
+	if not hrp then return end
+
+	hrp.CFrame = CFrame.new(pos + Vector3.new(0, 3, 0))
+end
+
+local teleportButtonsData = {
+	"Armory",
+	"Kitchen",
+	"Café",
+	"Nexus",
+	"Cellblock",
+	"Criminal base",
+}
+
+for _, name in ipairs(teleportButtonsData) do
+	local Row = Instance.new("Frame")
+	Row.Parent = TeleportScroll
+	Row.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+	Row.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	Row.BorderSizePixel = 0
+	Row.Size = UDim2.new(1, -20, 0, 38)
+
+	local RowCorner = Instance.new("UICorner")
+	RowCorner.CornerRadius = UDim.new(0, 3)
+	RowCorner.Parent = Row
+
+	local RowStroke = Instance.new("UIStroke")
+	RowStroke.Parent = Row
+	RowStroke.Thickness = 0.7
+	RowStroke.Color = Color3.fromRGB(255, 217, 78)
+	RowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+
+	local RowLabel = Instance.new("TextLabel")
+	RowLabel.Parent = Row
+	RowLabel.BackgroundTransparency = 1.000
+	RowLabel.BorderSizePixel = 0
+	RowLabel.Position = UDim2.new(0.05, 0, 0, 0)
+	RowLabel.Size = UDim2.new(0, 200, 0, 37)
+	RowLabel.Font = Enum.Font.FredokaOne
+	RowLabel.Text = name
+	RowLabel.TextColor3 = Color3.fromRGB(235, 255, 103)
+	RowLabel.TextSize = 14.000
+	RowLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+	local RowButton = Instance.new("ImageButton")
+	RowButton.Parent = Row
+	RowButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+	RowButton.BackgroundTransparency = 1.000
+	RowButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+	RowButton.BorderSizePixel = 0
+	RowButton.Position = UDim2.new(0.876666486, 0, 0.131578952, 0)
+	RowButton.Size = UDim2.new(0, 28, 0, 28)
+	RowButton.Image = "rbxassetid://110620726041573"
+
+	RowButton.MouseButton1Click:Connect(function()
+		teleportToCoord(name)
+	end)
+
+	addHoverEffect(Row, RowStroke, 0.7)
+end
+
+do
+	local dragging = false
+	local dragInput, dragStart, startPos
+
+	local function update(input)
+		local delta = input.Position - dragStart
+		Frame.Position = UDim2.new(
+			startPos.X.Scale,
+			startPos.X.Offset + delta.X,
+			startPos.Y.Scale,
+			startPos.Y.Offset + delta.Y
+		)
+	end
+
+	Frame.InputBegan:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+			local relY = input.Position.Y - Frame.AbsolutePosition.Y
+			if relY <= 40 then
+				dragging = true
+				dragStart = input.Position
+				startPos = Frame.Position
+
+				input.Changed:Connect(function()
+					if input.UserInputState == Enum.UserInputState.End then
+						dragging = false
+					end
+				end)
+			end
+		end
+	end)
+
+	Frame.InputChanged:Connect(function(input)
+		if input.UserInputType == Enum.UserInputType.MouseMovement
+			or input.UserInputType == Enum.UserInputType.Touch then
+			dragInput = input
+		end
+	end)
+
+	UserInputService.InputChanged:Connect(function(input)
+		if input == dragInput and dragging then
+			update(input)
+		end
+	end)
+end
+
+local pages = {
+	Tab1 = ScrollingFrame,
+	Tab2 = TeleportPage,
+	Tab3 = PlayerPage,
+}
+
+local buttons = {
+	Tab1 = Tab1,
+	Tab2 = Tab2,
+	Tab3 = Tab3,
+}
+
+local function setTab(tabName)
+	for name, page in pairs(pages) do
+		page.Visible = (name == tabName)
+	end
+	for name, btn in pairs(buttons) do
+		if name == tabName then
+			btn.BackgroundColor3 = Color3.fromRGB(255, 217, 78)
+			btn.TextColor3 = Color3.fromRGB(9, 9, 9)
+		else
+			btn.BackgroundColor3 = Color3.fromRGB(12, 12, 12)
+			btn.TextColor3 = Color3.fromRGB(235, 255, 103)
+		end
+	end
+end
+
+Tab1.MouseButton1Click:Connect(function() setTab("Tab1") end)
+Tab2.MouseButton1Click:Connect(function() setTab("Tab2") end)
+Tab3.MouseButton1Click:Connect(function() setTab("Tab3") end)
+setTab("Tab1")
+
+Frame_6.BackgroundTransparency  = 0.93
+Frame_8.BackgroundTransparency  = 0.93
+Frame_10.BackgroundTransparency = 0.93
+Frame_12.BackgroundTransparency = 0.93
+Frame_14.BackgroundTransparency = 0.93
+InfiniteJumpToggleBack.BackgroundTransparency = 0.93
+NoclipToggleBack.BackgroundTransparency = 0.93
+TextButton.BackgroundTransparency  = 1
+TextButton_2.BackgroundTransparency = 1
+TextButton_3.BackgroundTransparency = 1
+TextButton_4.BackgroundTransparency = 1
+AimbotToggleButton.BackgroundTransparency = 1
+InfiniteJumpToggleButton.BackgroundTransparency = 1
+NoclipToggleButton.BackgroundTransparency = 1
+ESPEnv.ToggleBack.BackgroundTransparency = 0.93
+ESPEnv.ToggleButton.BackgroundTransparency = 1
+
+local Weapons = {
+	["M9"] = true,
+	["MP5"] = true,
+	["Remington 870"] = true,
+	["AK-47"] = true,
+	["M4A1"] = true,
+	["FAL"] = true,
+	["Taser"] = true,
+}
+
+local ZeroRecoilEnabled = false
+local OriginalSpread = {}
+local ZeroRecoilAttrConn = {}
+
+local function ensureZeroRecoilAttributeWatcher(tool)
+	if ZeroRecoilAttrConn[tool] then return end
+	ZeroRecoilAttrConn[tool] = tool:GetAttributeChangedSignal("SpreadRadius"):Connect(function()
+		if ZeroRecoilEnabled then
+			tool:SetAttribute("SpreadRadius", 0)
+		end
+	end)
+end
+
+local function applyZeroRecoilToTool(tool)
+	if not tool or not tool:IsA("Tool") then return end
+	if not Weapons[tool.Name] then return end
+
+	local current = tool:GetAttribute("SpreadRadius")
+	if current == nil then return end
+
+	if OriginalSpread[tool] == nil then
+		OriginalSpread[tool] = current
+	end
+
+	if ZeroRecoilEnabled then
+		tool:SetAttribute("SpreadRadius", 0)
+	else
+		if OriginalSpread[tool] ~= nil then
+			tool:SetAttribute("SpreadRadius", OriginalSpread[tool])
+		end
+	end
+
+	ensureZeroRecoilAttributeWatcher(tool)
+end
+
+local function scanZeroRecoil(character)
+	character = character or player.Character
+	if not character then return end
+
+	for _, t in ipairs(character:GetChildren()) do
+		if t:IsA("Tool") then
+			applyZeroRecoilToTool(t)
+		end
+	end
+	for _, t in ipairs(backpack:GetChildren()) do
+		if t:IsA("Tool") then
+			applyZeroRecoilToTool(t)
+		end
+	end
+end
+
+local function hookCharacterZero(char)
+	if not char then return end
+	char.ChildAdded:Connect(function(child)
+		if child:IsA("Tool") then
+			task.wait(0.1)
+			applyZeroRecoilToTool(child)
+		end
+	end)
+	scanZeroRecoil(char)
+end
+
+local charAddedZeroConn = player.CharacterAdded:Connect(hookCharacterZero)
+if player.Character then hookCharacterZero(player.Character) end
+
+local backpackAddedZeroConn = backpack.ChildAdded:Connect(function(child)
+	if child:IsA("Tool") then
+		task.wait(0.1)
+		applyZeroRecoilToTool(child)
+	end
+end)
+
+TextButton.MouseButton1Click:Connect(function()
+	ZeroRecoilEnabled = not ZeroRecoilEnabled
+	if ZeroRecoilEnabled then
+		Frame_6.BackgroundTransparency = 0
+		TextButton.BackgroundTransparency = 0
+	else
+		Frame_6.BackgroundTransparency = 0.93
+		TextButton.BackgroundTransparency = 1
+	end
+	scanZeroRecoil()
+end)
+
+local RapidFireEnabled = false
+local OriginalFireRate = {}
+local OriginalAutoFire = {}
+local RapidFireFireConn = {}
+local RapidFireAutoConn = {}
+
+local function ensureRapidFireWatchers(tool)
+	if not RapidFireFireConn[tool] then
+		RapidFireFireConn[tool] = tool:GetAttributeChangedSignal("FireRate"):Connect(function()
+			if RapidFireEnabled then
+				tool:SetAttribute("FireRate", 0.04)
+			end
+		end)
+	end
+	if not RapidFireAutoConn[tool] then
+		RapidFireAutoConn[tool] = tool:GetAttributeChangedSignal("AutoFire"):Connect(function()
+			if RapidFireEnabled then
+				tool:SetAttribute("AutoFire", true)
+			end
+		end)
+	end
+end
+
+local function applyRapidFireToTool(tool)
+	if not tool or not tool:IsA("Tool") then return end
+	if not Weapons[tool.Name] then return end
+
+	local currentFire = tool:GetAttribute("FireRate")
+	if currentFire ~= nil and OriginalFireRate[tool] == nil then
+		OriginalFireRate[tool] = currentFire
+	end
+
+	local currentAuto = tool:GetAttribute("AutoFire")
+	if currentAuto ~= nil and OriginalAutoFire[tool] == nil then
+		OriginalAutoFire[tool] = currentAuto
+	end
+
+	if RapidFireEnabled then
+		if currentFire ~= nil then tool:SetAttribute("FireRate", 0.04) end
+		if currentAuto ~= nil then tool:SetAttribute("AutoFire", true) end
+	else
+		if OriginalFireRate[tool] ~= nil then
+			tool:SetAttribute("FireRate", OriginalFireRate[tool])
+		end
+		if OriginalAutoFire[tool] ~= nil then
+			tool:SetAttribute("AutoFire", OriginalAutoFire[tool])
+		end
+	end
+
+	ensureRapidFireWatchers(tool)
+end
+
+local function scanRapidFire(character)
+	character = character or player.Character
+	if not character then return end
+
+	for _, t in ipairs(character:GetChildren()) do
+		if t:IsA("Tool") then
+			applyRapidFireToTool(t)
+		end
+	end
+	for _, t in ipairs(backpack:GetChildren()) do
+		if t:IsA("Tool") then
+			applyRapidFireToTool(t)
+		end
+	end
+end
+
+local function hookCharacterRapid(char)
+	if not char then return end
+	char.ChildAdded:Connect(function(child)
+		if child:IsA("Tool") then
+			task.wait(0.1)
+			applyRapidFireToTool(child)
+		end
+	end)
+	scanRapidFire(char)
+end
+
+local charAddedRapidConn = player.CharacterAdded:Connect(hookCharacterRapid)
+if player.Character then hookCharacterRapid(player.Character) end
+
+local backpackAddedRapidConn = backpack.ChildAdded:Connect(function(child)
+	if child:IsA("Tool") then
+		task.wait(0.1)
+		applyRapidFireToTool(child)
+	end
+end)
+
+TextButton_2.MouseButton1Click:Connect(function()
+	RapidFireEnabled = not RapidFireEnabled
+	if RapidFireEnabled then
+		Frame_8.BackgroundTransparency = 0
+		TextButton_2.BackgroundTransparency = 0
+	else
+		Frame_8.BackgroundTransparency = 0.93
+		TextButton_2.BackgroundTransparency = 1
+	end
+	scanRapidFire()
+end)
+
+local FastReloadEnabled = false
+local OriginalReloadTime = {}
+local FastReloadConn = {}
+
+local function ensureFastReloadWatcher(tool)
+	if FastReloadConn[tool] then return end
+	FastReloadConn[tool] = tool:GetAttributeChangedSignal("ReloadTime"):Connect(function()
+		if FastReloadEnabled then
+			tool:SetAttribute("ReloadTime", 0)
+		end
+	end)
+end
+
+local function applyFastReloadToTool(tool)
+	if not tool or not tool:IsA("Tool") then return end
+	if not Weapons[tool.Name] then return end
+
+	local current = tool:GetAttribute("ReloadTime")
+	if current ~= nil and OriginalReloadTime[tool] == nil then
+		OriginalReloadTime[tool] = current
+	end
+
+	if FastReloadEnabled then
+		if current ~= nil then tool:SetAttribute("ReloadTime", 0) end
+	else
+		if OriginalReloadTime[tool] ~= nil then
+			tool:SetAttribute("ReloadTime", OriginalReloadTime[tool])
+		end
+	end
+
+	ensureFastReloadWatcher(tool)
+end
+
+local function scanFastReload(character)
+	character = character or player.Character
+	if not character then return end
+
+	for _, t in ipairs(character:GetChildren()) do
+		if t:IsA("Tool") then
+			applyFastReloadToTool(t)
+		end
+	end
+	for _, t in ipairs(backpack:GetChildren()) do
+		if t:IsA("Tool") then
+			applyFastReloadToTool(t)
+		end
+	end
+end
+
+local function hookCharacterFast(char)
+	if not char then return end
+	char.ChildAdded:Connect(function(child)
+		if child:IsA("Tool") then
+			task.wait(0.1)
+			applyFastReloadToTool(child)
+		end
+	end)
+	scanFastReload(char)
+end
+
+local charAddedFastConn = player.CharacterAdded:Connect(hookCharacterFast)
+if player.Character then hookCharacterFast(player.Character) end
+
+local backpackAddedFastConn = backpack.ChildAdded:Connect(function(child)
+	if child:IsA("Tool") then
+		task.wait(0.1)
+		applyFastReloadToTool(child)
+	end
+end)
+
+TextButton_3.MouseButton1Click:Connect(function()
+	FastReloadEnabled = not FastReloadEnabled
+	if FastReloadEnabled then
+		Frame_10.BackgroundTransparency = 0
+		TextButton_3.BackgroundTransparency = 0
+	else
+		Frame_10.BackgroundTransparency = 0.93
+		TextButton_3.BackgroundTransparency = 1
+	end
+	scanFastReload()
+end)
+
+local LockFirstPersonEnabled = false
+
+TextButton_4.MouseButton1Click:Connect(function()
+	LockFirstPersonEnabled = not LockFirstPersonEnabled
+	if LockFirstPersonEnabled then
+		Frame_12.BackgroundTransparency = 0
+		TextButton_4.BackgroundTransparency = 0
+	else
+		Frame_12.BackgroundTransparency = 0.93
+		TextButton_4.BackgroundTransparency = 1
+	end
+end)
+
+local WalkSpeedValue = 16
+local JumpPowerValue = 50
+local InfiniteJumpEnabled = false
+local NoclipEnabled = false
+local NoclipConnection
+
+local WalkSpeedDragging = false
+local function updateWalkSpeedValue(xPosition)
+    local sliderAbsolute = WalkSpeedSlider.AbsolutePosition.X
+    local sliderWidth = WalkSpeedSlider.AbsoluteSize.X
+    local relativeX = math.clamp(xPosition - sliderAbsolute, 0, sliderWidth)
+    local percentage = relativeX / sliderWidth
+    
+    WalkSpeedValue = math.floor(1 + (100 - 1) * percentage)
+    
+    WalkSpeedFill.Size = UDim2.new(percentage, 0, 1, 0)
+    WalkSpeedButton.Position = UDim2.new(percentage, -7, 0, -2)
+    
+    WalkSpeedLabel.Text = "WalkSpeed: " .. tostring(WalkSpeedValue)
+    
+    local character = player.Character
+    if character then
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.WalkSpeed = WalkSpeedValue
+        end
+    end
+end
+
+WalkSpeedButton.MouseButton1Down:Connect(function()
+    WalkSpeedDragging = true
+end)
+
+local JumpPowerDragging = false
+local function updateJumpPowerValue(xPosition)
+    local sliderAbsolute = JumpPowerSlider.AbsolutePosition.X
+    local sliderWidth = JumpPowerSlider.AbsoluteSize.X
+    local relativeX = math.clamp(xPosition - sliderAbsolute, 0, sliderWidth)
+    local percentage = relativeX / sliderWidth
+    
+    JumpPowerValue = math.floor(1 + (100 - 1) * percentage)
+    
+    JumpPowerFill.Size = UDim2.new(percentage, 0, 1, 0)
+    JumpPowerButton.Position = UDim2.new(percentage, -7, 0, -2)
+    
+    JumpPowerLabel.Text = "JumpPower: " .. tostring(JumpPowerValue)
+    
+    local character = player.Character
+    if character then
+        local humanoid = character:FindFirstChildOfClass("Humanoid")
+        if humanoid then
+            humanoid.JumpPower = JumpPowerValue
+        end
+    end
+end
+
+JumpPowerButton.MouseButton1Down:Connect(function()
+    JumpPowerDragging = true
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if WalkSpeedDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        updateWalkSpeedValue(input.Position.X)
+    end
+    if JumpPowerDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        updateJumpPowerValue(input.Position.X)
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        WalkSpeedDragging = false
+        JumpPowerDragging = false
+    end
+end)
+
+WalkSpeedSlider.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        WalkSpeedDragging = true
+        updateWalkSpeedValue(input.Position.X)
+    end
+end)
+
+JumpPowerSlider.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        JumpPowerDragging = true
+        updateJumpPowerValue(input.Position.X)
+    end
+end)
+
+InfiniteJumpToggleButton.MouseButton1Click:Connect(function()
+    InfiniteJumpEnabled = not InfiniteJumpEnabled
+    if InfiniteJumpEnabled then
+        InfiniteJumpToggleBack.BackgroundTransparency = 0
+        InfiniteJumpToggleButton.BackgroundTransparency = 0
+    else
+        InfiniteJumpToggleBack.BackgroundTransparency = 0.93
+        InfiniteJumpToggleButton.BackgroundTransparency = 1
+    end
+end)
+
+UserInputService.InputBegan:Connect(function(input)
+    if InfiniteJumpEnabled and input.KeyCode == Enum.KeyCode.Space then
+        local character = player.Character
+        if character then
+            local humanoid = character:FindFirstChildOfClass("Humanoid")
+            if humanoid then
+                humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+            end
+        end
+    end
+end)
+
+local function noclip()
+    if NoclipEnabled then
+        local character = player.Character
+        if character then
+            for _, part in pairs(character:GetDescendants()) do
+                if part:IsA("BasePart") and part.CanCollide then
+                    part.CanCollide = false
+                end
+            end
+        end
+    end
+end
+
+NoclipToggleButton.MouseButton1Click:Connect(function()
+    NoclipEnabled = not NoclipEnabled
+    if NoclipEnabled then
+        NoclipToggleBack.BackgroundTransparency = 0
+        NoclipToggleButton.BackgroundTransparency = 0
+        
+        if NoclipConnection then
+            NoclipConnection:Disconnect()
+        end
+        NoclipConnection = RunService.Stepped:Connect(noclip)
+    else
+        NoclipToggleBack.BackgroundTransparency = 0.93
+        NoclipToggleButton.BackgroundTransparency = 1
+        
+        if NoclipConnection then
+            NoclipConnection:Disconnect()
+            NoclipConnection = nil
+        end
+        
+        local character = player.Character
+        if character then
+            for _, part in pairs(character:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.CanCollide = true
+                end
+            end
+        end
+    end
+end)
+
+player.CharacterAdded:Connect(function(character)
+    task.wait(0.5)
+    
+    local humanoid = character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.WalkSpeed = WalkSpeedValue
+        humanoid.JumpPower = JumpPowerValue
+    end
+    
+    if NoclipEnabled then
+        noclip()
+    end
+end)
+
+if player.Character then
+    local humanoid = player.Character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        humanoid.WalkSpeed = WalkSpeedValue
+        humanoid.JumpPower = JumpPowerValue
+    end
+end
+
+local AimbotEnabled = false
+local AimbotActive = false
+local CurrentFOV = 100
+local MinFOV = 50
+local MaxFOV = 300
+local MaxTargetDistance = 100
+
+local function updateFOVCircle()
+    FOVCircle.Size = UDim2.new(0, CurrentFOV, 0, CurrentFOV)
+    TextLabel_7.Text = "FOV Size: " .. tostring(math.floor(CurrentFOV))
+end
+
+local SliderDragging = false
+local function updateSliderValue(xPosition)
+    local sliderAbsolute = FOVSlider.AbsolutePosition.X
+    local sliderWidth = FOVSlider.AbsoluteSize.X
+    local relativeX = math.clamp(xPosition - sliderAbsolute, 0, sliderWidth)
+    local percentage = relativeX / sliderWidth
+    
+    CurrentFOV = math.floor(MinFOV + (MaxFOV - MinFOV) * percentage)
+    
+    SliderFill.Size = UDim2.new(percentage, 0, 1, 0)
+    SliderButton.Position = UDim2.new(percentage, -7, 0, -2)
+    
+    updateFOVCircle()
+end
+
+SliderButton.MouseButton1Down:Connect(function()
+    SliderDragging = true
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+    if SliderDragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        updateSliderValue(input.Position.X)
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        SliderDragging = false
+    end
+end)
+
+FOVSlider.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        SliderDragging = true
+        updateSliderValue(input.Position.X)
+    end
+end)
+
+updateFOVCircle()
+
+AimbotToggleButton.MouseButton1Click:Connect(function()
+    AimbotEnabled = not AimbotEnabled
+    FOVCircle.Visible = AimbotEnabled
+    
+    if AimbotEnabled then
+        Frame_14.BackgroundTransparency = 0
+        AimbotToggleButton.BackgroundTransparency = 0
+    else
+        Frame_14.BackgroundTransparency = 0.93
+        AimbotToggleButton.BackgroundTransparency = 1
+        AimbotActive = false
+    end
+end)
+
+local function getClosestPlayerInFOV()
+    if not player.Character then return nil end
+    
+    local camera = workspace.CurrentCamera
+    if not camera then return nil end
+    
+    local localHead = player.Character:FindFirstChild("Head")
+    if not localHead then return nil end
+    
+    local myTeam = player.Team
+    local closestPlayer = nil
+    local closestDistance = math.huge
+    
+    for _, otherPlayer in ipairs(Players:GetPlayers()) do
+        if otherPlayer ~= player and otherPlayer.Character then
+            local otherTeam = otherPlayer.Team
+            
+            if not myTeam or otherTeam ~= myTeam then
+                local otherHumanoid = otherPlayer.Character:FindFirstChildOfClass("Humanoid")
+                local otherHead = otherPlayer.Character:FindFirstChild("Head")
+                
+                if otherHumanoid and otherHumanoid.Health > 0 and otherHead then
+                    local distance = (otherHead.Position - localHead.Position).Magnitude
+                    
+                    if distance <= MaxTargetDistance then
+                        local screenPoint, onScreen = camera:WorldToViewportPoint(otherHead.Position)
+                        
+                        if onScreen then
+                            local screenCenter = Vector2.new(camera.ViewportSize.X / 2, camera.ViewportSize.Y / 2)
+                            local targetPos = Vector2.new(screenPoint.X, screenPoint.Y)
+                            local screenDiff = (targetPos - screenCenter)
+                            
+                            local distanceFromCenter = screenDiff.Magnitude
+                            local fovRadius = (CurrentFOV / 2) * (camera.ViewportSize.X / 100)
+                            
+                            if distanceFromCenter <= fovRadius then
+                                if distance < closestDistance then
+                                    closestDistance = distance
+                                    closestPlayer = otherPlayer
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
+    
+    return closestPlayer
+end
+
+UserInputService.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 and AimbotEnabled then
+        AimbotActive = true
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then
+        AimbotActive = false
+    end
+end)
+
+RunService.RenderStepped:Connect(function()
+    if not AimbotEnabled or not AimbotActive then return end
+    
+    local camera = workspace.CurrentCamera
+    if not camera then return end
+    
+    local character = player.Character
+    if not character then return end
+    
+    local targetPlayer = getClosestPlayerInFOV()
+    if not targetPlayer or not targetPlayer.Character then return end
+    
+    local targetHead = targetPlayer.Character:FindFirstChild("Head")
+    if not targetHead then return end
+    
+    local distance = (targetHead.Position - character:GetPivot().Position).Magnitude
+    local adaptiveSmoothing = math.clamp(distance / 50, 0.1, 0.5)
+    
+    local currentCFrame = camera.CFrame
+    local targetCFrame = CFrame.new(camera.CFrame.Position, targetHead.Position)
+    
+    camera.CFrame = currentCFrame:Lerp(targetCFrame, adaptiveSmoothing)
+end)
+
+RunService.RenderStepped:Connect(function()
+    if FOVCircle.Visible then
+        FOVCircle.Position = UDim2.new(0.5, 0, 0.464, 0)
+    end
+end)
+
+function ESPEnv.GetColorForPlayer(plr)
+    local team = plr.Team
+    local name = team and team.Name or ""
+
+    if name == "Inmates" then
+        return Color3.fromRGB(255, 140, 0)
+    elseif name == "Criminals" then
+        return Color3.fromRGB(255, 0, 0) 
+    elseif name == "Guards" then
+        return Color3.fromRGB(0, 120, 255)
+    else
+        return Color3.fromRGB(227, 218, 86)
+    end
+end
+
+function ESPEnv:ClearForPlayer(plr)
+    local data = self.Highlights[plr]
+    if not data then return end
+
+    if data.highlight and data.highlight.Destroy then
+        data.highlight:Destroy()
+    end
+
+    if data.conns then
+        for _, conn in ipairs(data.conns) do
+            if conn and conn.Connected then
+                conn:Disconnect()
+            end
+        end
+    end
+
+    self.Highlights[plr] = nil
+end
+
+function ESPEnv:ApplyToPlayer(plr)
+    if plr == player then return end
+
+    self:ClearForPlayer(plr)
+
+    local data = { conns = {} }
+    self.Highlights[plr] = data
+
+    local function attachHighlight(char)
+        if not self.Enabled then return end
+        if not char then return end
+
+        if data.highlight and data.highlight.Parent then
+            data.highlight:Destroy()
+        end
+
+        local hl = Instance.new("Highlight")
+        hl.Name = "Lynix_ESP_Highlight"
+        hl.Adornee = char
+        hl.FillColor = self.GetColorForPlayer(plr)
+        hl.FillTransparency = 0.25
+        hl.OutlineColor = Color3.fromRGB(255, 255, 255)
+        hl.OutlineTransparency = 0
+        hl.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+        hl.Parent = char
+
+        data.highlight = hl
+    end
+
+    if plr.Character then
+        attachHighlight(plr.Character)
+    end
+
+    table.insert(data.conns, plr.CharacterAdded:Connect(function(char)
+        if data.highlight then
+            data.highlight:Destroy()
+            data.highlight = nil
+        end
+        task.wait(0.5)
+        attachHighlight(char)
+    end))
+
+    table.insert(data.conns, plr:GetPropertyChangedSignal("Team"):Connect(function()
+        if data.highlight then
+            data.highlight.FillColor = self.GetColorForPlayer(plr)
+        end
+    end))
+end
+
+function ESPEnv:Enable()
+    if self.Enabled then return end
+    self.Enabled = true
+
+    for _, plr in ipairs(Players:GetPlayers()) do
+        self:ApplyToPlayer(plr)
+    end
+
+    if self.Connections.playerAdded and self.Connections.playerAdded.Connected then
+        self.Connections.playerAdded:Disconnect()
+    end
+    self.Connections.playerAdded = Players.PlayerAdded:Connect(function(plr)
+        self:ApplyToPlayer(plr)
+    end)
+
+    if self.Connections.playerRemoving and self.Connections.playerRemoving.Connected then
+        self.Connections.playerRemoving:Disconnect()
+    end
+    self.Connections.playerRemoving = Players.PlayerRemoving:Connect(function(plr)
+        self:ClearForPlayer(plr)
+    end)
+end
+
+function ESPEnv:Disable()
+    if not self.Enabled then return end
+    self.Enabled = false
+
+    for plr, _ in pairs(self.Highlights) do
+        self:ClearForPlayer(plr)
+    end
+
+    if self.Connections.playerAdded and self.Connections.playerAdded.Connected then
+        self.Connections.playerAdded:Disconnect()
+    end
+    if self.Connections.playerRemoving and self.Connections.playerRemoving.Connected then
+        self.Connections.playerRemoving:Disconnect()
+    end
+
+    self.Connections.playerAdded = nil
+    self.Connections.playerRemoving = nil
+end
+
+ESPEnv.ToggleButton.MouseButton1Click:Connect(function()
+    if ESPEnv.Enabled then
+        ESPEnv:Disable()
+        ESPEnv.ToggleBack.BackgroundTransparency = 0.93
+        ESPEnv.ToggleButton.BackgroundTransparency = 1
+    else
+        ESPEnv:Enable()
+        ESPEnv.ToggleBack.BackgroundTransparency = 0
+        ESPEnv.ToggleButton.BackgroundTransparency = 0
+    end
+end)
+
+local originalSize = Frame.Size
+local minimized = false
+
+ImageButton_3.MouseButton1Click:Connect(function()
+	minimized = not minimized
+	if minimized then
+		Frame_3.Visible = false
+		Frame_4.Visible = false
+		Frame_2.Visible = false
+		Frame.Size = UDim2.new(originalSize.X.Scale, originalSize.X.Offset, 0, 40)
+	else
+		Frame_3.Visible = true
+		Frame_4.Visible = true
+		Frame_2.Visible = true
+		Frame.Size = originalSize
+	end
+end)
+
+ImageButton_2.MouseButton1Click:Connect(function()
+	ScreenGui:Destroy()
+end)
